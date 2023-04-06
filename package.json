@@ -1,6 +1,6 @@
 {
     "name": "wle-js-upgrade",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Upgrade scripts for Wonderland Engine JavaScript projects",
     "license": "MIT",
     "type": "module",
