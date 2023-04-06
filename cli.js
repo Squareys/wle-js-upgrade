@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 import {migrateScript} from './wle-js-upgrade.mjs';
-import glob from 'glob';
 
-const filenames = await glob([process.argv[2]]);
-if (filenames.length === 0) {
-    throw new Error('No files found that match the pattern');
-}
+async function main() {
+    const filenames = process.argv.slice(2);
+    if (filenames.length === 0) {
+        throw new Error('No files found that match the pattern');
+    }
 
-for (const filename of filenames) {
-    if (!migrateScript(filename)) {
-        process.exit(1);
+    for (const filename of filenames) {
+        console.log('>', filename);
+        await migrateScript(filename);
     }
 }
+
+main();

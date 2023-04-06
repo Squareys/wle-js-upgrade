@@ -28,7 +28,6 @@
         "wle-js-upgrade": "./dist/cli.js"
     },
     "dependencies": {
-        "glob": "^9.3.4",
         "prettier": "^2.8.7"
     },
     "devDependencies": {

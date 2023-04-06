@@ -167,6 +167,12 @@ function convertComponents(
     return result;
 }
 
+function generateImports(lib: string, imports: string[]) {
+    if (imports.length === 0) return '';
+    const uniqueImports = [...new Set(imports)].sort();
+    return `import {${uniqueImports.join(', ')}} from '${lib}';\n`;
+}
+
 /* Parse filename argument and check existence */
 export async function migrateScript(filename: string) {
     if (!existsSync(filename)) {
@@ -176,12 +182,6 @@ export async function migrateScript(filename: string) {
     /* Keep track of imports from @wonderlandengine/api */
     const apiImports = ['Component'];
     const glMatrixImports: string[] = [];
-
-    function generateImports(lib: string, imports: string[]) {
-        if (imports.length === 0) return '';
-        const uniqueImports = [...new Set(imports)].sort();
-        return `import {${uniqueImports.join(', ')}} from '${lib}';\n`;
-    }
 
     /* Read the script and convert components */
     let contents = readFileSync(filename, 'utf8');
@@ -210,5 +210,6 @@ export async function migrateScript(filename: string) {
         console.warn('Warning: Could not find prettier');
         console.warn('You will want to run prettier yourself.');
     }
+
     return true;
 }
