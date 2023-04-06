@@ -1,0 +1,41 @@
+{
+    "name": "wle-js-upgrade",
+    "version": "1.0.0",
+    "description": "Upgrade scripts for Wonderland Engine JavaScript projects",
+    "license": "MIT",
+    "type": "module",
+    "main": "dist/wle-js-upgrade.mjs",
+    "module": "./dist/wle-js-upgrade.mjs",
+    "types": "./dist/wle-js-upgrade.d.ts",
+    "scripts": {
+        "build:ts": "tsc",
+        "build:ts:watch": "tsc --watch",
+        "test": "npm run build:ts && jasmine --config=test/jasmine.json",
+        "prepublishOnly": "npm run build:ts",
+        "pretty": "prettier --config ./.prettierrc.json --write ./"
+    },
+    "files": [
+        "dist/*.js",
+        "dist/*.d.ts"
+    ],
+    "keywords": [
+        "webxr",
+        "wonderland-engine",
+        "tools"
+    ],
+    "author": "Jonathan Hale",
+    "bin": {
+        "wle-js-upgrade": "./dist/cli.js"
+    },
+    "dependencies": {
+        "glob": "^9.3.4",
+        "prettier": "^2.8.7"
+    },
+    "devDependencies": {
+        "@types/node": "^18.15.11",
+        "@types/prettier": "^2.7.2",
+        "jasmine": "^4.6.0",
+        "prettier": "^2.8.7",
+        "typescript": "^5.0.3"
+    }
+}
