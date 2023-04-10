@@ -7,6 +7,9 @@
  *   node wonderland-js-upgrade.mjs *.js
  */
 import {readFileSync, writeFileSync, existsSync} from 'node:fs';
+import {fileURLToPath} from 'url';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** Convert a string to CamelCase */
 function toCamelCase(str: string) {
@@ -60,7 +63,6 @@ function convertFunctions(
         'canvas',
         'scene',
         'physics',
-        'xrSession',
         'onXRSession',
         'arSupported',
         'vrSupported',
@@ -68,6 +70,14 @@ function convertFunctions(
         'textures',
     ])
         functions = functions.replaceAll('WL.' + symbol, 'this.engine.' + symbol);
+
+    /* Replace global WL.xr* use that should be this.engine.xr now */
+    for (const symbol of [
+        ['xrSession', 'session'],
+        ['xrFrame', 'frame'],
+        ['xrBaseLayer', 'baseLayer'],
+    ])
+        functions = functions.replaceAll('WL.' + symbol[0], 'this.engine.xr.' + symbol[1]);
 
     /* This regex matches `functionName: (async)? function(params) {`
      * for replacement with ES6 class version */
@@ -133,6 +143,7 @@ function convertComponents(
     for (const m of matches) {
         const typeName = m[1];
         console.log('Migrating component', typeName);
+        apiImports.push('Component');
         const index = m.index || 0;
         const propsScopeStart = index + m[0].length;
         const propsScopeEnd = getScopeEnd(contents, propsScopeStart);
@@ -173,6 +184,19 @@ function generateImports(lib: string, imports: string[]) {
     return `import {${uniqueImports.join(', ')}} from '${lib}';\n`;
 }
 
+function convertIndex(contents: string) {
+    const hasConstants = contents.indexOf('/* wle:auto-constants:start */') >= 0;
+    const hasImports = contents.indexOf('/* wle:auto-imports:start */') >= 0;
+    const hasXRButtonSetup = contents.indexOf('function setupButtonsXR() {') >= 0;
+
+    if (hasImports && (!hasConstants || !hasXRButtonSetup)) {
+        console.log('Detected outdated entrypoint file. Replacing contents.');
+        return readFileSync(__dirname + '/../data/index.js', 'utf8');
+    }
+
+    return contents;
+}
+
 /* Parse filename argument and check existence */
 export async function migrateScript(filename: string) {
     if (!existsSync(filename)) {
@@ -180,19 +204,20 @@ export async function migrateScript(filename: string) {
     }
 
     /* Keep track of imports from @wonderlandengine/api */
-    const apiImports = ['Component'];
+    const apiImports: string[] = [];
     const glMatrixImports: string[] = [];
 
     /* Read the script and convert components */
     let contents = readFileSync(filename, 'utf8');
+    contents = convertIndex(contents);
     contents = convertComponents(contents, apiImports, glMatrixImports);
 
     /* Add imports */
-    contents =
+    let imports =
         generateImports('@wonderlandengine/api', apiImports) +
-        generateImports('gl-matrix', glMatrixImports) +
-        '\n' +
-        contents;
+        generateImports('gl-matrix', glMatrixImports);
+    console.log(imports);
+    contents = (imports ? imports + '\n' : '') + contents;
 
     /* Overwrite the input file with the result */
     writeFileSync(filename, contents);

@@ -27,23 +27,16 @@ describe('cli', () => {
     it('test-component', async () => {
         copyFileSync('./test/test-component.input.js', './test/test-component.js');
 
-        const {error, stdout, stderr} = await execAsync(
-            'wle-js-upgrade ./test/test-component.js'
-        );
+        const {error} = await execAsync('wle-js-upgrade ./test/test-component.js');
         expect(error).toBe(null);
         compareFiles('./test/test-component.expected.js', './test/test-component.js');
     });
 
-    it('glob', async () => {
-        copyFileSync('./test/test-component.input.js', './test/test-glob0.js');
-        copyFileSync('./test/test-component.input.js', './test/test-glob1.js');
+    it('test-entrypoint', async () => {
+        copyFileSync('./test/index.input.js', './test/index.js');
 
-        const {error, stdout, stderr} = await execAsync(
-            'wle-js-upgrade ./test/test-glob*.js'
-        );
+        const {error} = await execAsync('wle-js-upgrade ./test/index.js');
         expect(error).toBe(null);
-
-        compareFiles('./test/test-component.expected.js', './test/test-glob0.js');
-        compareFiles('./test/test-component.expected.js', './test/test-glob1.js');
+        compareFiles('./test/index.expected.js', './test/index.js');
     });
 });

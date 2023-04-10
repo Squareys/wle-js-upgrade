@@ -4,9 +4,8 @@
     "description": "Upgrade scripts for Wonderland Engine JavaScript projects",
     "license": "MIT",
     "type": "module",
-    "main": "dist/wle-js-upgrade.mjs",
-    "module": "./dist/wle-js-upgrade.mjs",
-    "types": "./dist/wle-js-upgrade.d.ts",
+    "main": "./dist/cli.mjs",
+    "module": "./dist/cli.mjs",
     "scripts": {
         "build:ts": "tsc",
         "build:ts:watch": "tsc --watch",
@@ -16,7 +15,9 @@
     },
     "files": [
         "dist/*.js",
-        "dist/*.d.ts"
+        "dist/*.mjs",
+        "dist/*.d.ts",
+        "data/*"
     ],
     "keywords": [
         "webxr",
@@ -25,7 +26,7 @@
     ],
     "author": "Jonathan Hale",
     "bin": {
-        "wle-js-upgrade": "./dist/cli.js"
+        "wle-js-upgrade": "./dist/cli.mjs"
     },
     "dependencies": {
         "prettier": "^2.8.7"
