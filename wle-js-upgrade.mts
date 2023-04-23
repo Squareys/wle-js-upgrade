@@ -188,8 +188,9 @@ function convertIndex(contents: string) {
     const hasConstants = contents.indexOf('/* wle:auto-constants:start */') >= 0;
     const hasImports = contents.indexOf('/* wle:auto-imports:start */') >= 0;
     const hasXRButtonSetup = contents.indexOf('function setupButtonsXR() {') >= 0;
+    const hasOldLoadRuntime = contents.indexOf('await loadRuntime(RuntimeBaseName,') >= 0;
 
-    if (hasImports && (!hasConstants || !hasXRButtonSetup)) {
+    if (hasOldLoadRuntime || (hasImports && (!hasConstants || !hasXRButtonSetup))) {
         console.log('Detected outdated entrypoint file. Replacing contents.');
         return readFileSync(__dirname + '/../data/index.js', 'utf8');
     }

@@ -32,6 +32,14 @@ describe('cli', () => {
         compareFiles('./test/test-component.expected.js', './test/test-component.js');
     });
 
+    it('test-entrypoint-rc2', async () => {
+        copyFileSync('./test/index.rc2.input.js', './test/index.js');
+
+        const {error} = await execAsync('wle-js-upgrade ./test/index.js');
+        expect(error).toBe(null);
+        compareFiles('./test/index.expected.js', './test/index.js');
+    });
+
     it('test-entrypoint', async () => {
         copyFileSync('./test/index.input.js', './test/index.js');
 
