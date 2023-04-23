@@ -18,3 +18,14 @@ The command upgrades JavaScript files in-place.
 wle-js-upgrade your-script.js
 wle-js-upgrade *.js
 ```
+
+# Running the tests
+
+Before running the tests, make sure to link the package to make the
+command globally available. This is done to allow testing of the
+CLI interface.
+
+```sh
+npm link
+npm run tests
+```
