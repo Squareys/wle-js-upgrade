@@ -26,6 +26,7 @@ command globally available. This is done to allow testing of the
 CLI interface.
 
 ```sh
+npm run build
 npm link
-npm run tests
+npm run test
 ```

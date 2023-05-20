@@ -28,6 +28,11 @@ WL.registerComponent(
             WL.onXRSessionEnd.push(this.onXRSessionEnd.bind(this));
         },
 
+        update: function() {
+            this.object.getTranslationWorld();
+            this.object.getForward();
+        },
+
         getComponents: function (obj) {
             const comps = obj
                 .getComponents()

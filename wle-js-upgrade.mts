@@ -79,6 +79,14 @@ function convertFunctions(
     ])
         functions = functions.replaceAll('WL.' + symbol[0], 'this.engine.xr.' + symbol[1]);
 
+    /* Replace getTranslationWorld */
+    for (const symbol of [
+        ['getTranslationWorld', 'getPositionWorld'],
+        ['getTranslationLocal', 'getPositionLocal'],
+        ['getForward', 'getForwardWorld'],
+    ])
+        functions = functions.replaceAll('.' + symbol[0], '.' + symbol[1]);
+
     /* This regex matches `functionName: (async)? function(params) {`
      * for replacement with ES6 class version */
     const regex_functions =

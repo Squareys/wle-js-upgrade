@@ -30,6 +30,11 @@ export class VrModeActiveSwitch extends Component {
         this.engine.onXRSessionEnd.push(this.onXRSessionEnd.bind(this));
     }
 
+    update() {
+        this.object.getPositionWorld();
+        this.object.getForwardWorld();
+    }
+
     getComponents(obj) {
         const comps = obj.getComponents().filter((c) => c.type != 'vr-mode-active-switch');
         this.components = this.components.concat(comps);
